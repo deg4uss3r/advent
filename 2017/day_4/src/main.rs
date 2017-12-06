@@ -541,7 +541,13 @@ ydjhhf yeltadb lwi cjdcb ovaox xrdm vkxub
 zax xza admbc lvpzfeh auxn rwasj
 kebx eild nrskdr meja jxczomh gcne";
 
-let collect_phrases = phrase.split("\n").collect();
+    let collect_phrases: Vec<&str> = phrase.split("\n").collect();
+    for phrase in collect_phrases.iter() {
+        let output =valid_passphrase(phrase.to_string());
+        if output {
+            valids+=1;
+        } 
+    }
 
-println!("{:?}",collect_phrases);
+    println!("{}", valids);
 }
