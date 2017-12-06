@@ -1,0 +1,6 @@
+[package]
+name = "day_5"
+version = "0.1.0"
+authors = ["deg4uss3r <ricky@hosfelt.io>"]
+
+[dependencies]
