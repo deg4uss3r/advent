@@ -59,6 +59,9 @@ fn main() {
     let point = find_coordinates(1024);
     println!("It will take {} steps to get back to the origin", walk_it_out(point));
 
+    //challenge
+    let point = find_coordinates(277678);
+    println!("It will take {} steps to get back to the origin", walk_it_out(point)); 
 
     //102400, 319 steps
     let point = find_coordinates(102400);
