@@ -9,3 +9,4 @@ Usually done in Rust
    - [Day 4 Rust Playground link](https://play.rust-lang.org/?gist=57339f0e30c5d8a8ed1c6025b82441ae&version=stable)
    - [Day 5 Rust Playground link](https://play.rust-lang.org/?gist=445ae9ea83ba769edd0469f10831a0cf&version=stable) 
    - [Day 6 Rust Playground link](https://play.rust-lang.org/?gist=1160eb7e95ad11698332adc9c4f28d27&version=stable)
+   - [Day 7 Rust Playground link](https://play.rust-lang.org/?gist=60d22e172dc4aa542d7f3efc4f914430&version=stable)
