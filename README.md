@@ -11,3 +11,5 @@ Usually done in Rust
    - [Day  6 Rust Playground link](https://play.rust-lang.org/?gist=1160eb7e95ad11698332adc9c4f28d27&version=stable)
    - [Day  7 Rust Playground link](https://play.rust-lang.org/?gist=60d22e172dc4aa542d7f3efc4f914430&version=stable)
    - [Day 10 Rust Playground link](https://play.rust-lang.org/?gist=2b5c9101cac8a9412d83ecdefa7d6200&version=stable)
+   - [Day 12 Rust Playground link](https://play.rust-lang.org/?gist=dd7a31796532eb89cbcdc99f11ecc931&version=stable)
+   - [Day 13 Rust Playground link](https://play.rust-lang.org/?gist=dd0f4160e3cd7036a40aa0163cfbc982&version=stable)
