@@ -1,8 +1,6 @@
-//http://adventofcode.com/2017/day/10
-#[allow(dead_code)]
-#[allow(unused_assignments)]
-
+//http://adventofcode.com/2017/day/14
 //abstraction of the hash function
+
 fn elf_hash(lengths: &Vec<usize>, mut iv:Vec<usize>, mut skip_size:usize, mut index:usize) -> (Vec<usize>,usize,usize) {
     //copy origial length for caluclations and in place permuations
     let orig_iv_length = iv.len();
@@ -76,29 +74,7 @@ fn elf_hash(lengths: &Vec<usize>, mut iv:Vec<usize>, mut skip_size:usize, mut in
     (iv, skip_size, index)
 }
 
-fn elf_hash_one(length_string:String) -> usize {
-    //how many skips to do each loop iteration
-    let mut skip_size = 0;
-    let mut index = 0;
-
-    //setting inital array (0 -> 255)
-    let mut iv: Vec<usize> = (0..256).collect(); 
-
-    let mut ov:Vec<usize> = Vec::new();
-
-    let length_string_vec: Vec<&str> = length_string.split(",").collect();
-    let mut lengths: Vec<usize> = Vec::new();
-    for i in length_string_vec.iter() {
-        lengths.push(i.parse::<usize>().unwrap());
-    }
-
-    match elf_hash(&lengths, iv, skip_size, index) {
-        (x,y,z) => {ov=x;skip_size=y;index=z;}
-    }
-    ov[0]*ov[1]
-}
-
-fn elf_hash_two(length_string: String) {
+fn elf_hash_two(length_string: String) -> Vec<String> {
     //converting string to ASCII decimal
     let mut lengths: Vec<usize> = length_string.into_bytes().iter().map(|x| *x as usize).collect();
     //adding magic word
@@ -135,29 +111,56 @@ fn elf_hash_two(length_string: String) {
         hash_xor_result.push(xor_byte);
     }
 
-    let mut output = String::new();
-
+    //change to an actual number so we can count 1s later
+    let mut output: Vec<String> = Vec::new();
     for i in hash_xor_result.iter() {
-        output = format!("{}{:02x}",output,i);
+        output.push(format!("{:02x}",i));
     }
 
-    println!("Knot hash sparse: {}", output);
+    output
+}
+
+fn elf_hash_fourteen(input: String) -> u32 {
+    let mut grid_count = 0; 
+    let mut grid: Vec<Vec<String>> = Vec::new();
+
+    while grid_count < 128 {
+        let new_input = format!("{}-{}", input, grid_count);
+        let row: Vec<String> = elf_hash_two(new_input);
+        grid.push(row);
+        grid_count+=1;
+    }
+
+    let mut grid_nums: Vec<Vec<usize>> = Vec::new();
+
+    for row in grid.iter() {
+        let mut number_row: Vec<usize> = Vec::new();
+        for number in row.iter() {
+            number_row.push(usize::from_str_radix(number, 16).unwrap()); 
+        }
+        grid_nums.push(number_row); 
+    }
+
+    let mut ones = 0;
+
+    for row in grid_nums.iter() {
+        for num in row.iter() {
+            ones+=num.count_ones();            
+        }
+    }
+
+    ones
 }
 
 fn main() {
-    //should return 12 (start vec is 0,1,2,3,4 and the final vec is 3,4,2,1,0) 3*4=12
-    //commented out because of the original iv length is 5 here, not 256
-    //let lengths = vec!(3,4,1,5);
-    //println!("{}", elf_hash(lengths, 5));
+    //test 1 should  be 8108
+    let test_input = "flqrgnkx";
+    println!("{}", elf_hash_fourteen(test_input.to_string()));
 
     //challenge
-        //part one still works fine
-    let lengths = "227,169,3,166,246,201,0,47,1,255,2,254,96,3,97,144";
-    println!("Part1: {}", elf_hash_one(lengths.to_string()));
-        //part two, challenge line
-    elf_hash_two(lengths.to_string());
+    let input = "hwlqcszp";
+    println!("{}", elf_hash_fourteen(input.to_string()));
 
-    //part 2: test 1, should be 33efeb34ea91902bb2f59c9920caa6cd
-    //let lengths = "AoC 2017";
-    //elf_hash_two(lengths.to_string());
+    let input = "xlqgujun";
+    println!("{}", elf_hash_fourteen(input.to_string()));
 }

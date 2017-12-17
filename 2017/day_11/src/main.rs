@@ -42,30 +42,64 @@ fn reduce(pos: &mut Position) -> Position {
     
     //remove proper opposites
     if pos.n > pos.s {
-        red_pos.n = pos.n-pos.s;
+        red_pos.n += pos.n-pos.s;
     }
     else {
-        red_pos.s = pos.s-pos.n;
+        red_pos.s += pos.s-pos.n;
     }
 
     if pos.ne > pos.sw {
-        red_pos.ne = pos.ne-pos.sw;
+        red_pos.ne += pos.ne-pos.sw;
     }
     else {
-        red_pos.sw = pos.sw-pos.ne;
+        red_pos.sw += pos.sw-pos.ne;
     }
 
     if pos.nw > pos.se {
-        red_pos.nw = pos.nw-pos.se; 
+        red_pos.nw += pos.nw-pos.se; 
     }
     else {
-        red_pos.se = pos.se-pos.nw;
+        red_pos.se += pos.se-pos.nw;
     }
 
-
-
     //remove other crap that has carryovers
-    
+    if pos.ne > pos.nw {
+        red_pos.ne += pos.ne - pos.nw;
+        red_pos.n += pos.ne-pos.nw; //remainder norths go here
+    }
+    else {
+        red_pos.nw += pos.nw - pos.ne;
+        red_pos.n += pos.nw-pos.ne; //remainder norths go here 
+    }
+    if pos.se > pos.sw {
+        red_pos.se += pos.se - pos.sw;
+        red_pos.s += pos.se-pos.sw; //remainder norths go here
+    }
+    else {
+        red_pos.nw += pos.nw - pos.ne;
+        red_pos.n += pos.nw-pos.ne; //remainder norths go here 
+    }
+
+    if pos.s > pos.ne {
+        red_pos.se += pos.s - pos.ne; 
+    }
+    else {
+        red_pos.se += pos.ne-pos.s;
+    }
+    if pos.s > pos.nw {
+        red_pos.sw += pos.s - pos.nw; 
+    }
+    else {
+        red_pos.sw += pos.nw-pos.s;
+    }
+
+    if pos.n > pos.se {
+        red_pos.ne = pos.n-pos.se; 
+    }
+    else {
+        red_pos.ne = pos.se-pos.n;
+    }
+
     red_pos
 }
 
