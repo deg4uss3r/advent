@@ -1,0 +1,15 @@
+[package]
+name = "day_1"
+version = "0.1.0"
+authors = ["Ricky <Ricky@Hosfelt.io>"]
+edition = "2018"
+
+[[bin]]
+name = "day_1_1"
+path = "day_1_1/src/main.rs"
+
+[[bin]]
+name = "day_1_2"
+path = "day_1_2/src/main.rs"
+
+[dependencies]

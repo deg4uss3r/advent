@@ -1,7 +1,0 @@
-[package]
-name = "day_1_1"
-version = "0.1.0"
-authors = ["Ricky <Ricky@Hosfelt.io>"]
-edition = "2018"
-
-[dependencies]
