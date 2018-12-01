@@ -1,6 +1,9 @@
 # Solutions for adventofcode.com
 
-Usually done in Rust
+- 2018
+ - [Day 1]
+  - [Part 1 Rust Playground](https://play.rust-lang.org/?gist=34e1e12e04ba6a919fea449193d665d3)
+  - [Part 2 Rust Playground](https://play.rust-lang.org/?gist=7630f29df6573e009c42601001661294)
 
  - 2017
    - [Day  1 Rust Playground link](https://play.rust-lang.org/?gist=5526f63283d4d6ac930cbc8ec75512ff&version=stable)
