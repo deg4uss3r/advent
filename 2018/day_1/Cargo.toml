@@ -4,12 +4,4 @@ version = "0.1.0"
 authors = ["Ricky <Ricky@Hosfelt.io>"]
 edition = "2018"
 
-[[bin]]
-name = "day_1_1"
-path = "src/day_1_1.rs"
-
-[[bin]]
-name = "day_1_2"
-path = "src/day_1_2.rs"
-
 [dependencies]

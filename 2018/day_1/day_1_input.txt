@@ -1,15 +1,4 @@
-fn compute_frequency(input: &str) -> i64 {
-    let split_freqs = input.split("\n");
-    let num_freqs: Vec<i64> = split_freqs
-        .map(|x| x.parse::<i64>().expect(&format!("Error could not parse {} as i64", x)))
-        .collect();
-        
-    let sum = num_freqs.iter().fold(0, |accumulator,x| accumulator+x);
-    sum
-}
-
-fn main() {
-    let puzzle_input="+12
++12
 -10
 -4
 -8
@@ -967,6 +956,4 @@ fn main() {
 -8
 +10
 -1
--110292";
-    println!("{}", compute_frequency(puzzle_input));
-}
+-110292
