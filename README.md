@@ -5,6 +5,7 @@
   - [Day 2 Rust Playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2015&gist=a84185f368b8bd9ff0ea746e092e6b25)
   - [Day 3 Rust Playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2015&gist=f4ee72f88c43299dec59d6aef1f2dbbc)
   - [Day 4 Rust Playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2015&gist=70f64f1ca7f4621a70f74622258046e1)
+  - [Day 5 Rust Playground](https://play.rust-lang.org/?version=stable&mode=debug&edition=2018&gist=2007d42f711332193159abc6bf78623fi)
  - 2017
    - [Day  1 Rust Playground link](https://play.rust-lang.org/?gist=5526f63283d4d6ac930cbc8ec75512ff&version=stable)
    - [Day  2 Rust Playground link](https://play.rust-lang.org/?gist=6c370cbd07b274d082900a3a86ecbe8d&version=stable)
