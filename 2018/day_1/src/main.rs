@@ -3,8 +3,6 @@ use std::error::Error;
 use std::io::stdin;
 use std::io::Read;
 
-
-
 fn compute_frequency(input: &str) -> Result<i64, Box<Error>> {
     Ok(input.trim().split("\n")
         .map(|x| {
