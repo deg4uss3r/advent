@@ -1,7 +1,7 @@
 use clap::{Arg, App, SubCommand};
 use std::fs::File;
 use std::io::prelude::*;
-use std::collections::HashSet;
+use std::collections::{HashSet, HashMap};
 
 fn read_input_file(input_path: String) -> Result<String, std::io::Error> {
     let mut file = File::open(input_path)?;
@@ -65,11 +65,12 @@ impl Distance for Point {
     }
 }
 
-fn trace_wire(commands: &Vec<String>) -> HashSet<Point> {
+fn trace_wire(commands: &Vec<String>) -> HashMap<Point, u64> {
     // Get command direction
-    let mut wire_trace: HashSet<Point> = HashSet::new();
+    let mut wire_trace: HashMap<Point, u64> = HashMap::new();
     //Starting at origin (0,0)
     let mut wire = Point{x: 0, y: 0};
+    let mut steps: u64 = 1;
 
     for command in commands.iter() {
         let direction = &command.to_string()[0..1];
@@ -79,27 +80,31 @@ fn trace_wire(commands: &Vec<String>) -> HashSet<Point> {
         if direction == "R" {
             while i_d < distance as usize {
                 wire = Point::move_right(wire);
-                wire_trace.insert(wire);
+                wire_trace.insert(wire, steps);
                 i_d += 1;
+                steps += 1;
             }
         } else if direction == "L" {
             while i_d < distance as usize {
                 wire = Point::move_left(wire);
-                wire_trace.insert(wire);
+                wire_trace.insert(wire, steps);
                 i_d += 1;
+                steps += 1;
             }
         } else if direction == "U" {
             while i_d < distance as usize {
                 wire = Point::move_up(wire);
-                wire_trace.insert(wire);
+                wire_trace.insert(wire, steps);
                 i_d += 1;
+                steps += 1;
             }
 
         } else if direction == "D" {
             while i_d < distance as usize {
                 wire = Point::move_down(wire);
-                wire_trace.insert(wire);
+                wire_trace.insert(wire, steps);
                 i_d += 1;
+                steps += 1;
             }
         }
     }
@@ -107,46 +112,10 @@ fn trace_wire(commands: &Vec<String>) -> HashSet<Point> {
     wire_trace
 }
 
-fn trace_wire_ordered(commands: &Vec<String>) -> Vec<Point> {
-    // Get command direction
-    let mut wire_trace: Vec<Point> = Vec::new();
-    //Starting at origin (0,0)
-    let mut wire = Point{x: 0, y: 0};
-
-    for command in commands.iter() {
-        let direction = &command.to_string()[0..1];
-        let distance: u64 = u64::from_str_radix(&command[1..].to_string(), 10).expect("Error could not extract distance from command");
-        let mut i_d = 0;
-
-        if direction == "R" {
-            while i_d < distance as usize {
-                wire = Point::move_right(wire);
-                wire_trace.append(&mut vec!(wire));
-                i_d += 1;
-            }
-        } else if direction == "L" {
-            while i_d < distance as usize {
-                wire = Point::move_left(wire);
-                wire_trace.append(&mut vec!(wire));
-                i_d += 1;
-            }
-        } else if direction == "U" {
-            while i_d < distance as usize {
-                wire = Point::move_up(wire);
-                wire_trace.append(&mut vec!(wire));
-                i_d += 1;
-            }
-
-        } else if direction == "D" {
-            while i_d < distance as usize {
-                wire = Point::move_down(wire);
-                wire_trace.append(&mut vec!(wire));
-                i_d += 1;
-            }
-        }
-    }
-
-    wire_trace
+fn get_intersections(wire_one: &HashMap<Point, u64>, wire_two: &HashMap<Point, u64>) -> HashSet<Point> {
+    let one_k: HashSet<&Point> = wire_one.keys().collect();
+    let two_k: HashSet<&Point> = wire_two.keys().collect();
+    one_k.intersection(&two_k).map(|x| *x.clone()).collect()
 }
 
 fn main() {
@@ -206,7 +175,7 @@ fn main() {
             //in values_parsed there are two wires
             let first_wire = trace_wire(&values_parsed[0]);
             let second_wire = trace_wire(&values_parsed[1]);
-            let wire_intersections = first_wire.intersection(&second_wire); 
+            let wire_intersections = get_intersections(&first_wire, &second_wire); 
 
             let mut manhattan_d = u64::max_value();
 
@@ -220,18 +189,6 @@ fn main() {
         }
     }
 
-    //day_3 part_2 example (for quick testing)
-    if let Some(ref matches) = matches.subcommand_matches("ex2") {
-        if matches.is_present("input") {
-            let i_values = matches.value_of("input").unwrap().to_string();
-            let values_parsed = parse_input(i_values);
-            for value in values_parsed.iter() {
-                let t_w = trace_wire_ordered(&value);
-                println!("{:?}", t_w);
-            }
-        }
-    }
-
     // day_3 part_2
     if let Some(ref matches) = matches.subcommand_matches("part_2") {
         if matches.is_present("input") {
@@ -241,22 +198,18 @@ fn main() {
             //in values_parsed there are two wires
             let first_wire = trace_wire(&values_parsed[0]);
             let second_wire = trace_wire(&values_parsed[1]);
-            let wire_intersections = first_wire.intersection(&second_wire);
-            let first_wire_ordered = trace_wire_ordered(&values_parsed[0]);
-            let second_wire_ordered = trace_wire_ordered(&values_parsed[1]);
+            let wire_intersections = get_intersections(&first_wire, &second_wire);
 
             let mut delay: u64 = u64::max_value();
 
             for inter in wire_intersections {
-                let inter_d = first_wire_ordered.iter().position(|&r| &r == inter).unwrap() as u64 + second_wire_ordered.iter().position(|&s| &s == inter).unwrap() as u64;
+                let inter_d = *(first_wire.get(&inter).unwrap()) + *(second_wire.get(&inter).unwrap());
                 if inter_d < delay {
                     delay = inter_d;
                 }
             }
-
-            // Adding +2 since I don't count the first step from origin to point 1
-            // it's 2, for both wires 
-            println!("Shortest intersected delay: {}", delay+2);
+            
+            println!("Shortest intersected delay: {}", delay);
         }
     }
 }  
