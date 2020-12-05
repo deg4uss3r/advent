@@ -1,9 +1,0 @@
-[package]
-name = "{{crate_name}}"
-version = "0.1.0"
-authors = ["{{authors}}"]
-edition = "2018"
-
-[dependencies]
-clap = "2"
-anyhow = "1"

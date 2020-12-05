@@ -1,0 +1,7 @@
+#! /bin/zsh 
+
+cargo generate --git https://github.com/deg4uss3r/advent_template.git -b main -f --name ${1}
+cd ./${1} 
+rm -rf .git
+rm -rf .cargo-ok
+cd ../
