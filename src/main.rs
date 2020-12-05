@@ -15,14 +15,14 @@ fn parse_input(input: &str) -> Result<(), anyhow::Error> {
 }
 
 fn part_1() {
-
+    unimplemented!()
 }
 
-fn part_2() {
+//fn part_2() {
+//
+//}
 
-}
-
-fn main() {
+fn main() -> Result<(), anyhow::Error> {
     let matches = App::new("AoC 2020: {{crate_name}}")
         .version("1.0")
         .author("{{authors}}")
@@ -88,7 +88,7 @@ fn main() {
             println!(": {}", part_1(parsed_input));
         }
     }
-
+/*
     // {{crate_name}} part_2 example
     if let Some(ref matches) = matches.subcommand_matches("ex2") {
         if matches.is_present("input") {
@@ -108,4 +108,6 @@ fn main() {
             println!(": {}", part_2(parsed_input));
         }
     }
+*/
+    Ok(())
 }
