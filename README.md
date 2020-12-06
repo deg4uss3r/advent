@@ -5,6 +5,7 @@
    - [Day 3](years/2020/day_3)
    - [Day 4](years/2020/day_4)
    - [Day 5](years/2020/day_5)
+   - [Day 6](years/2020/day_6)
  - [2019](years/2019)
    - [Day 1](years/2019/day_1)
    - [Day 2](years/2019/day_2)
