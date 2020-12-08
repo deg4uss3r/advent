@@ -1,0 +1,9 @@
+[package]
+name = "day_7"
+version = "0.1.0"
+authors = ["Ricky <Ricky@Hosfelt.io>"]
+edition = "2018"
+
+[dependencies]
+clap = "2"
+anyhow = "1"
