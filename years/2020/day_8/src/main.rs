@@ -1,5 +1,5 @@
-use std::{fs::File, io::prelude::*};
 use std::convert::TryFrom;
+use std::{fs::File, io::prelude::*};
 
 use anyhow::Context;
 use clap::{App, Arg, SubCommand};
@@ -43,57 +43,74 @@ impl std::fmt::Display for ParseError {
 }
 
 impl TryFrom<&str> for Instruction {
-    type Error = ParseError;
-    
-    fn try_from(input: &str) -> Result<Instruction, ParseError> {
-        let ins_value: Vec<&str> = input.split(" ").collect(); 
-        
+    type Error = anyhow::Error;
+
+    fn try_from(input: &str) -> Result<Instruction, anyhow::Error> {
+        let ins_value: Vec<&str> = input.split(" ").collect();
+
         if ins_value.len() != 2 {
-            return Err(ParseError::MalformedLine);
+            Err(ParseError::MalformedLine)
+                .with_context(|| format!("Too many spaces in line '{}'", input))?;
         }
-        
+
         match ins_value[0] {
-            "acc" => Ok(Instruction::acc(ins_value[1].parse::<i64>().map_err(|_| ParseError::MalformedNumber)?)),
-            "jmp" => Ok(Instruction::jmp(ins_value[1].parse::<i64>().map_err(|_| ParseError::MalformedNumber)?)),
-            "nop" => Ok(Instruction::nop(ins_value[1].parse::<i64>().map_err(|_| ParseError::MalformedNumber)?)),
-            _ => Err(ParseError::InstructionNotRecognized),
+            "acc" => Ok(Instruction::acc(
+                ins_value[1]
+                    .parse::<i64>()
+                    .map_err(|_| ParseError::MalformedNumber)
+                    .context(format!("Cannot parse value as i64 '{}'", ins_value[1]))?,
+            )),
+            "jmp" => Ok(Instruction::jmp(
+                ins_value[1]
+                    .parse::<i64>()
+                    .map_err(|_| ParseError::MalformedNumber)
+                    .context(format!("Cannot parse value as i64 '{}'", ins_value[1]))?,
+            )),
+            "nop" => Ok(Instruction::nop(
+                ins_value[1]
+                    .parse::<i64>()
+                    .map_err(|_| ParseError::MalformedNumber)
+                    .context(format!("Cannot parse value as i64 '{}'", ins_value[1]))?,
+            )),
+            _ => Err(ParseError::InstructionNotRecognized)
+                .context(format!("Unrecognized instruction '{}'", ins_value[0]))?,
         }
     }
 }
 
-fn parse_example_input(input: &str) -> Result<Vec<Instruction>, ParseError> {
+fn parse_example_input(input: &str) -> Result<Vec<Instruction>, anyhow::Error> {
     let mut instructions = Vec::new();
     let inputs: Vec<&str> = input.split("\n").collect();
-    
+
     for i in inputs.iter() {
         if i != &"" {
             instructions.push(Instruction::try_from(*i)?);
         }
     }
-    
+
     Ok(instructions)
 }
 
-fn parse_input(input: &str) -> Result<Vec<Instruction>, ParseError> {
+fn parse_input(input: &str) -> Result<Vec<Instruction>, anyhow::Error> {
     parse_example_input(input)
 }
 
 fn part_1(instructions: Vec<Instruction>) -> i64 {
     let mut visited_instruction = Vec::new();
     let mut accumulator = 0;
-    let mut index = 0; 
+    let mut index = 0;
     let mut next_index = 0;
-    
-    while !visited_instruction.contains(&next_index) {    
+
+    while !visited_instruction.contains(&next_index) {
         visited_instruction.push(index);
-        
-       let ins = &instructions[index as usize];
+
+        let ins = &instructions[index as usize];
 
         match ins {
             Instruction::acc(value) => {
                 accumulator += value;
                 next_index = index + 1;
-            },
+            }
             Instruction::jmp(value) => {
                 next_index = index + value;
             }
@@ -101,40 +118,40 @@ fn part_1(instructions: Vec<Instruction>) -> i64 {
                 next_index = index + 1;
             }
         }
-        
+
         index = next_index;
     }
-    
+
     accumulator
 }
 
 fn part_2(instructions: Vec<Instruction>) -> i64 {
     let mut accumulator = 0;
 
-    for instruction_index in 0..instructions.len()-1 {
+    for instruction_index in 0..instructions.len() - 1 {
         let mut instructions_copy = instructions.to_vec();
         let mut visited_instruction = Vec::new();
-        let mut index = 0; 
+        let mut index = 0;
         accumulator = 0;
         let mut next_index = 0;
 
         // Replace this instruction if it is a jmp or nop
         instructions_copy[instruction_index] = match instructions_copy[instruction_index] {
-            Instruction::jmp(value) => Instruction::nop(value), 
+            Instruction::jmp(value) => Instruction::nop(value),
             Instruction::nop(value) => Instruction::jmp(value),
             _ => instructions[instruction_index].clone(),
         };
-        
+
         while !visited_instruction.contains(&next_index) {
             visited_instruction.push(index);
-            
-        let ins = &instructions_copy[index as usize];
+
+            let ins = &instructions_copy[index as usize];
 
             match ins {
                 Instruction::acc(value) => {
                     accumulator += value;
                     next_index = index + 1;
-                },
+                }
                 Instruction::jmp(value) => {
                     next_index = index + value;
                 }
@@ -142,7 +159,7 @@ fn part_2(instructions: Vec<Instruction>) -> i64 {
                     next_index = index + 1;
                 }
             }
-            
+
             if next_index as usize == instructions.len() {
                 return accumulator;
             }
@@ -150,7 +167,7 @@ fn part_2(instructions: Vec<Instruction>) -> i64 {
             index = next_index;
         }
     }
-    
+
     accumulator
 }
 
@@ -252,7 +269,10 @@ fn main() -> Result<(), anyhow::Error> {
             )?;
             let parsed_input = parse_input(&total_inputs)?;
 
-            println!("Accumulator value with successful run: {}", part_2(parsed_input));
+            println!(
+                "Accumulator value with successful run: {}",
+                part_2(parsed_input)
+            );
         }
     }
 
