@@ -101,10 +101,6 @@ fn part_1(instructions: Vec<Instruction>) -> i64 {
                 next_index = index + 1;
             }
         }
-
-        if visited_instruction.contains(&next_index) {
-            return accumulator;
-        }
         
         index = next_index;
     }
@@ -145,10 +141,6 @@ fn part_2(instructions: Vec<Instruction>) -> i64 {
                 Instruction::nop(_value) => {
                     next_index = index + 1;
                 }
-            }
-
-            if visited_instruction.contains(&next_index) {
-                break;
             }
             
             if next_index as usize == instructions.len() {
@@ -240,7 +232,7 @@ fn main() -> Result<(), anyhow::Error> {
     if let Some(ref matches) = matches.subcommand_matches("ex2") {
         if matches.is_present("input") {
             println!(
-                ": {}",
+                "Accumulator value with successful run: {}",
                 part_2(parse_input(
                     matches
                         .value_of("input")
@@ -260,7 +252,7 @@ fn main() -> Result<(), anyhow::Error> {
             )?;
             let parsed_input = parse_input(&total_inputs)?;
 
-            println!(": {}", part_2(parsed_input));
+            println!("Accumulator value with successful run: {}", part_2(parsed_input));
         }
     }
 
