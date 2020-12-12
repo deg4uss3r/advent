@@ -11,6 +11,7 @@
    - [Day 9](years/2020/day_9)
    - [Day 10](years/2020/day_10)
    - [Day 11](years/2020/day_11)
+   - [DAy 12](years/2020/day_12)
  - [2019](years/2019)
    - [Day 1](years/2019/day_1)
    - [Day 2](years/2019/day_2)
