@@ -3,6 +3,8 @@ use std::{convert::TryFrom, fmt, fs::File, io::prelude::*};
 use anyhow::Context;
 use clap::{App, Arg, SubCommand};
 
+type Movements = Vec<Direction>;
+
 fn read_input_file(input_path: &str) -> Result<String, anyhow::Error> {
     let mut file =
         File::open(input_path).context(format!("Error opening input file '{}'", input_path))?;
@@ -114,14 +116,36 @@ struct Waypoint {
     east_west: Heading,
 }
 
-impl Waypoint {
+trait New {
+    fn new() -> Self;
+}
+
+impl New  for Waypoint {
     fn new() -> Self {
         Waypoint {
             north_south: Heading::North(1),
             east_west: Heading::East(10),
         }
     }
+}
 
+impl New for Ship {
+    fn new() -> Self {
+        Ship {
+            north: 0,
+            south: 0,
+            east: 0,
+            west: 0,
+            heading: Heading::East(0),
+        }
+    }
+}
+
+trait Turn {
+    fn turn(&mut self, direction: &Direction);
+}
+
+impl Turn for Waypoint {
     fn turn(&mut self, direction: &Direction) {
         let mut thevalue = 0;
 
@@ -163,7 +187,36 @@ impl Waypoint {
             self.east_west = compass[0].1.set_heading(old_ew);
         }
     }
+}
 
+impl Turn for Ship {
+    fn turn(&mut self, direction: &Direction) {
+        let mut compass = vec![
+            Heading::North(0),
+            Heading::East(0),
+            Heading::South(0),
+            Heading::West(0),
+        ];
+
+        //start the compass based off the ship's current direction
+        match self.heading {
+            Heading::North(_) => compass.rotate_left(0),
+            Heading::East(_) => compass.rotate_left(1),
+            Heading::South(_) => compass.rotate_left(2),
+            Heading::West(_) => compass.rotate_left(3),
+        }
+
+        match direction {
+            Direction::Left(value) => compass.rotate_right((value / 90) as usize),
+            Direction::Right(value) => compass.rotate_left((value / 90) as usize),
+            _ => (),
+        }
+
+        self.heading = compass[0];
+    }
+}
+
+impl Waypoint {
     fn update(&mut self, direction: &Direction) {
         match direction {
             Direction::North(v) => match self.north_south {
@@ -216,41 +269,6 @@ impl Waypoint {
 }
 
 impl Ship {
-    fn new() -> Self {
-        Ship {
-            north: 0,
-            south: 0,
-            east: 0,
-            west: 0,
-            heading: Heading::East(0),
-        }
-    }
-
-    fn turn(&mut self, direction: &Direction) {
-        let mut compass = vec![
-            Heading::North(0),
-            Heading::East(0),
-            Heading::South(0),
-            Heading::West(0),
-        ];
-
-        //start the compass based off the ship's current direction
-        match self.heading {
-            Heading::North(_) => compass.rotate_left(0),
-            Heading::East(_) => compass.rotate_left(1),
-            Heading::South(_) => compass.rotate_left(2),
-            Heading::West(_) => compass.rotate_left(3),
-        }
-
-        match direction {
-            Direction::Left(value) => compass.rotate_right((value / 90) as usize),
-            Direction::Right(value) => compass.rotate_left((value / 90) as usize),
-            _ => (),
-        }
-
-        self.heading = compass[0];
-    }
-
     fn move_ship(&mut self, direction: Direction) {
         match direction {
             Direction::North(value) => self.north += value,
@@ -298,7 +316,6 @@ impl Ship {
     }
 }
 
-type Movements = Vec<Direction>;
 
 fn parse_input(input: &str) -> Result<Movements, ParseError> {
     let moves: Vec<&str> = input.split("\n").collect();
@@ -325,13 +342,9 @@ fn part_1(moves: Movements) -> u64 {
 fn part_2(moves: Movements) -> u64 {
     let mut ship = Ship::new();
     let mut waypoint = Waypoint::new();
-    println!("{:?}", ship);
-    println!("{:?}", waypoint);
+    
     for m in moves {
-        println!("{:?}", m);
         ship.follow_waypoint(&mut waypoint, &m);
-        println!("{:?}", ship);
-        println!("{:?}", waypoint);
     }
 
     ship.manhattan_distance()
@@ -449,25 +462,19 @@ fn main() -> Result<(), anyhow::Error> {
 #[cfg(test)]
 mod tests {
     use super::*;
-    #[test]
-    fn ex1() {
-        let x = "F10
+    const PUZZLE: &str = "F10
 N3
 F7
 R90
 F11";
 
-        assert_eq!(25, part_1(parse_input(x).unwrap()));
+    #[test]
+    fn ex1() {
+        assert_eq!(25, part_1(parse_input(PUZZLE).unwrap()));
     }
 
     #[test]
     fn ex2() {
-        let x = "F10
-N3
-F7
-R90
-F11";
-
-        assert_eq!(286, part_2(parse_input(x).unwrap()));
+        assert_eq!(286, part_2(parse_input(PUZZLE).unwrap()));
     }
 }
