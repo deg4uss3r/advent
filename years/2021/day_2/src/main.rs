@@ -22,11 +22,10 @@ enum Error {
 impl fmt::Display for Error {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Error::FailedToParseLine=> write!(f,"Failed to parse the line"),
-            Error::FailedToParseCommand => write!(f,"Failed to parse Command from input"),
-            Error::FailedToParseValue => write!(f,"Failed to pase Value from input"),
+            Error::FailedToParseLine => write!(f, "Failed to parse the line"),
+            Error::FailedToParseCommand => write!(f, "Failed to parse Command from input"),
+            Error::FailedToParseValue => write!(f, "Failed to pase Value from input"),
         }
-        
     }
 }
 
@@ -39,11 +38,11 @@ enum Command {
 }
 
 impl TryFrom<&str> for Command {
-    type Error = Error; 
+    type Error = Error;
 
     fn try_from(input: &str) -> Result<Self, Error> {
-        let command_value: Vec<&str> = input.split(" ").collect(); 
-        
+        let command_value: Vec<&str> = input.split(" ").collect();
+
         if command_value.len() != 2 {
             println!("{:?}", command_value);
             return Err(Error::FailedToParseLine);
@@ -52,7 +51,9 @@ impl TryFrom<&str> for Command {
         let command = command_value[0].to_owned();
         let value = command_value[1].to_owned();
 
-        let parsed_value = value.parse::<u32>().map_err(|_| Error::FailedToParseValue)?;
+        let parsed_value = value
+            .parse::<u32>()
+            .map_err(|_| Error::FailedToParseValue)?;
 
         Ok(match command.to_lowercase().as_str() {
             "forward" => Ok(Command::Forward(parsed_value)),
@@ -67,7 +68,10 @@ fn parse_input(input: &str) -> Result<Vec<Command>, anyhow::Error> {
     //splitting each newline which will have a command+space+value
     let commands: Vec<&str> = input.trim_end().split("\n").collect();
 
-    Ok(commands.iter().map(|s| Command::try_from(*s)).collect::<Result<Vec<Command>, _>>()?)
+    Ok(commands
+        .iter()
+        .map(|s| Command::try_from(*s))
+        .collect::<Result<Vec<Command>, _>>()?)
 }
 
 fn part_1(commands: Vec<Command>) -> u32 {
@@ -81,7 +85,7 @@ fn part_1(commands: Vec<Command>) -> u32 {
             Command::Up(value) => vertical_position -= value,
         };
     }
-    
+
     horizontal_position * vertical_position
 }
 
@@ -92,18 +96,19 @@ fn part_2(commands: Vec<Command>) -> u32 {
 
     for command in commands.iter() {
         match command {
-            Command::Forward(value) => { 
-                horizontal_position += value; 
+            Command::Forward(value) => {
+                horizontal_position += value;
                 if aim > 0 {
-                    vertical_position += value*aim;
+                    vertical_position += value * aim;
                 }
-            },
+            }
             Command::Down(value) => aim += value,
             Command::Up(value) => aim -= value,
         };
     }
-    
-    horizontal_position * vertical_position}
+
+    horizontal_position * vertical_position
+}
 
 fn main() -> Result<(), anyhow::Error> {
     let matches = App::new("AoC 2021: day_2")
