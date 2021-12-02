@@ -13,26 +13,41 @@ fn read_input_file(input_path: &str) -> Result<String, anyhow::Error> {
 }
 
 fn parse_input(input: &str) -> Result<Vec<u64>, anyhow::Error> {
-    // each new line represents a depth reading 
+    // each new line represents a depth reading
     let str_depths: Vec<&str> = input.split("\n").collect();
 
-    Ok(str_depths.iter().map(|s| s.parse::<u64>()).collect::<Result<Vec<u64>, _>>()?)
+    Ok(str_depths
+        .iter()
+        .map(|s| s.parse::<u64>())
+        .collect::<Result<Vec<u64>, _>>()?)
 }
 
 fn part_1(puzz_input: Vec<u64>) -> Result<usize, anyhow::Error> {
     use itertools::Itertools;
 
-    Ok(puzz_input.iter().tuple_windows().filter(|(t, n)| n > t).count())
+    Ok(puzz_input
+        .iter()
+        .tuple_windows()
+        .filter(|(t, n)| n > t)
+        .count())
 }
 
 fn part_2(puzz_input: Vec<u64>) -> Result<usize, anyhow::Error> {
     use itertools::Itertools;
 
     // sliding windows of 3, turned into sums
-    let depth_windows: Vec<u64> = puzz_input.iter().tuple_windows::<(_, _, _,)>().map(|(p, n, q)| p+n+q).collect();
+    let depth_windows: Vec<u64> = puzz_input
+        .iter()
+        .tuple_windows::<(_, _, _)>()
+        .map(|(p, n, q)| p + n + q)
+        .collect();
 
     // count if the sums increase
-    Ok(depth_windows.iter().tuple_windows().filter(|(t, n)| n > t).count())
+    Ok(depth_windows
+        .iter()
+        .tuple_windows()
+        .filter(|(t, n)| n > t)
+        .count())
 }
 
 fn main() -> Result<(), anyhow::Error> {
