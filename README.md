@@ -2,6 +2,7 @@
  - [2021](years/2021)
    - [Day 1](years/2021/day_1)
    - [Day 2](years/2021/day_2)
+   - [Day 3](years/2021/day_3)
  - [2020](years/2020)
    - [Day 1](years/2020/day_1)
    - [Day 2](years/2020/day_2)

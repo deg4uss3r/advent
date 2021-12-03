@@ -1,0 +1,10 @@
+[package]
+name = "day_3"
+version = "0.1.0"
+authors = ["Ricky Hosfelt <ricky_github@hosfe.lt>"]
+edition = "2018"
+
+[dependencies]
+clap = "2"
+anyhow = "1"
+array2d = "0.2"
