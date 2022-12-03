@@ -1,0 +1,9 @@
+[package]
+name = "day_3"
+version = "0.1.0"
+authors = ["Ricky Hosfelt <ricky_github@hosfe.lt>"]
+edition = "2021"
+
+[dependencies]
+clap = "4"
+anyhow = "1"
