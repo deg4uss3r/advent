@@ -6,6 +6,7 @@
    - [Day 4](years/2022/day_4)
    - [Day 5](years/2022/day_5)
    - [Day 6](years/2022/day_6)
+   - [Day 7](years/2022/day_7)
  - [2021](years/2021)
    - [Day 1](years/2021/day_1)
    - [Day 2](years/2021/day_2)
