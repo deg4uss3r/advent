@@ -1,0 +1,11 @@
+[package]
+name = "day_1"
+version = "0.1.0"
+authors = ["Ricky Hosfelt <ricky_github@hosfe.lt>"]
+edition = "2021"
+
+[dependencies]
+clap = "4"
+anyhow = "1"
+strum = "0.25"
+strum_macros = "0.25"
