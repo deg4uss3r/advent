@@ -1,0 +1,10 @@
+[package]
+name = "day_1"
+version = "0.1.0"
+authors = ["rth"]
+edition = "2021"
+
+[dependencies]
+clap = "4"
+anyhow = "1"
+thiserror = "2"
