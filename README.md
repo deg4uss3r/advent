@@ -1,6 +1,7 @@
 # Solutions for [adventofcode.com](https://adventofcode.com)
  - [2025](years/2025)
-   - [Day 1](years/2025/day_1) 
+   - [Day 1](years/2025/day_1)
+   - [Day 2](years/2025/day_2)
  - [2024](years/2024)
    - [Day 1](years/2024/day_1) 
  - [2023](years/2023)
